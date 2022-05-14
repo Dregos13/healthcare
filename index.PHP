@@ -2,6 +2,8 @@
 
 require_once ("./database/Database.php");
 
+header("LOCATION: src/login.php");
+
 
 
 if(extension_loaded("mongodb")) {
