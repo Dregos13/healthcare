@@ -38,8 +38,12 @@ $db = $conect->connect();
                             <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                         </div>
                         <div class="form-group">
-                            <input type="submit" class="form-control btn btn-primary submit px-3" name="log" href="#">Sign In
+                            <input type="submit" class="form-control btn btn-primary submit px-3" name="log" value="Log in">
                         </div>
+                    </form>
+                    <form method="post" action="signin.php" class="signin-form">
+                        <input type="submit" class="form-control btn btn-primary submit px-3" name="log" value="Sign in">
+
                     </form>
                 </div>
             </div>
@@ -69,6 +73,12 @@ if (isset($_POST['log'])){
         if ($cur->pass == $password && $cur->name == $user_name) {
 
             echo "Tenemos la sesión colega";
+
+            $_SESSION['user'] = $cur->_id;
+
+            echo $_SESSION['user'];
+
+            header("LOCATION: ./home.php");
         }else{
 
             echo "Something went wrong";

@@ -8,15 +8,6 @@ class Database
 
         $connection = new MongoDB\Driver\Manager("mongodb://localhost:27017");
 
-        if ($connection){
-
-            echo "Se ha conectado";
-
-        }else{
-
-            echo "nada";
-        }
-
         return $connection;
    }
 
