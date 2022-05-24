@@ -1,6 +1,8 @@
 <?php
 require_once ("../database/Database.php");
 
+
+
 $conect = new Database();
 $db = $conect->connect();
 
