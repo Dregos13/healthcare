@@ -75,6 +75,7 @@ if (isset($_POST['log'])){
             echo "Tenemos la sesión colega";
 
             $_SESSION['user'] = $cur->_id;
+            $_SESSION['name'] = $cur->name;
 
             echo $_SESSION['user'];
 
