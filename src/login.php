@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once ("../database/Database.php");
+require_once("../classes/Database.php");
 
 $conect = new Database();
 $db = $conect->connect();
@@ -68,18 +68,26 @@ if (isset($_POST['log'])){
 
     $cursor = $db->executeQuery("usuarios.user", $query);
 
+
     foreach ($cursor as $cur) {
 
         if ($cur->pass == $password && $cur->name == $user_name) {
 
-            echo "Tenemos la sesión colega";
+            $alta = $cur->alta;
 
-            $_SESSION['user'] = $cur->_id;
-            $_SESSION['name'] = $cur->name;
+            if($alta) {
 
-            echo $_SESSION['user'];
+                $_SESSION['user'] = $cur->_id;
+                $_SESSION['name'] = $cur->name;
 
-            header("LOCATION: ./home.php");
+                header("LOCATION: ./home.php");
+
+            }else{
+
+                echo '<script type="text/javascript">alert("No estas dado de alta aun, espera a que tu solicitud sea aprobada.");</script>';
+
+            }
+
         }else{
 
             echo "Something went wrong";

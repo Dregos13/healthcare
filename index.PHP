@@ -1,6 +1,6 @@
 <?php
 
-require_once ("./database/Database.php");
+require_once("./classes/Database.php");
 
 header("LOCATION: src/login.php");
 

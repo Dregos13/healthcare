@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once ("../database/Database.php");
+require_once("../classes/Database.php");
 
 $conect = new Database();
 $db = $conect->connect();
@@ -97,13 +97,13 @@ if (isset($_SESSION['user'])){
                             <div class="card mb-4">
                                 <form method="post" action="">
                                     <h2 class="mt-4">Name</h2>
-                                    <input type="text" value="<?php echo $_SESSION['name'] ?>" name="name">
+                                    <input class="form-control" type="text" value="<?php echo $_SESSION['name'] ?>" name="name">
                                     <h2 class="mt-4">Age</h2>
-                                    <input type="text" value="<?php echo $cur->Age ?>" name="age">
+                                    <input class="form-control" type="text" value="<?php echo $cur->Age ?>" name="age">
                                     <h2 class="mt-4">Email</h2>
-                                    <input type="text" value="<?php echo $cur->email ?>" name="email">
+                                    <input class="form-control" type="text" value="<?php echo $cur->email ?>" name="email">
                                     <h2 class="mt-4">Password</h2>
-                                    <input type="text" value="<?php echo $cur->pass ?>" name="pass">
+                                    <input class="form-control" type="text" value="<?php echo $cur->pass ?>" name="pass">
                                     <br><br>
                                     <input type="submit" value="Save Changes" name="modify">
                                 </form>
@@ -126,21 +126,26 @@ if (isset($_SESSION['user'])){
                             ['$set' => ['name' => $name]],
                             ['multi' => false, 'upsert' => false]
                         );
+
                         $bulk->update(
                             ['_id' => $_SESSION['user']],
                             ['$set' => ['Age' => $age]],
                             ['multi' => false, 'upsert' => false]
                         );
+
                         $bulk->update(
                             ['_id' => $_SESSION['user']],
                             ['$set' => ['email' => $email]],
                             ['multi' => false, 'upsert' => false]
                         );
+
                         $bulk->update(
                             ['_id' => $_SESSION['user']],
                             ['$set' => ['pass' => $pass]],
                             ['multi' => false, 'upsert' => false]
                         );
+
+                        $result = $db->executeBulkWrite('usuarios.user', $bulk);
 
                     }
                         ?>
@@ -150,11 +155,6 @@ if (isset($_SESSION['user'])){
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
                         <div class="text-muted">Copyright &copy; Your Website 2022</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
                     </div>
                 </div>
             </footer>
