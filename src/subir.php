@@ -25,6 +25,7 @@ if (isset($_SESSION['user'])){
         <link href="../style/style_homecss.css" rel="stylesheet" />
         <link href="../style/styles.css" rel="stylesheet" />
         <link href="../style/style_forms.css" rel="stylesheet" />
+        <link href="../style/file_upload.css" rel="stylesheet" />
         <link rel="icon" href="../assets/heart.png">
         <script src="../js/all.js" crossorigin="anonymous"></script>
     </head>
@@ -61,7 +62,7 @@ if (isset($_SESSION['user'])){
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">Data</div>
-                        <a class="nav-link" href="subir.php">
+                        <a class="nav-link" href="home.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                             Upload
                         </a>
@@ -99,64 +100,54 @@ if (isset($_SESSION['user'])){
 
                     <div>
                         <div class="registration-form">
-                            <form method="post" action="">
+                            <form method="post" action="" enctype="multipart/form-data">
                                 <h2 class="mt-4">Name</h2>
                                 <div class="form-group">
-                                    <input type="text" class="form-control item" value="<?php echo $_SESSION['name'] ?>" name="name">
-                                </div>
-                                <h2 class="mt-4">Password</h2>
-                                <div class="form-group">
-                                    <input type="password" class="form-control item" value="<?php echo $cur->pass ?>" name="pass">
-                                </div>
-                                <h2 class="mt-4">Email</h2>
-                                <div class="form-group">
-                                    <input type="text" class="form-control item" value="<?php echo $cur->email ?>" name="email">
-                                </div>
-                                <h2 class="mt-4">Age</h2>
-                                <div class="form-group">
-                                    <input type="text" class="form-control item" value="<?php echo $cur->Age ?>" name="age">
+                                    <input type="file" class="upload" name="dato">
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-block create-account" name="modify">Apply Changes</button>
+                                    <button type="submit" class="btn btn-block create-account" name="upload">Upload</button>
                                 </div>
                             </form>
                     </div>
                         <?php
                     }
 
-                    if (isset($_POST['modify'])){
+                    if (isset($_POST['upload'])){
 
-                        $name = $_POST['name'];
-                        $age = $_POST['age'];
-                        $email = $_POST['email'];
-                        $pass = $_POST['pass'];
+                        $file = $_FILES['dato']['tmp_name'];
 
-                        $bulk = new MongoDB\Driver\BulkWrite;
-                        $bulk->update(
-                            ['_id' => $_SESSION['user']],
-                            ['$set' => ['name' => $name]],
-                            ['multi' => false, 'upsert' => false]
-                        );
+                        if ($file != null){
 
-                        $bulk->update(
-                            ['_id' => $_SESSION['user']],
-                            ['$set' => ['Age' => $age]],
-                            ['multi' => false, 'upsert' => false]
-                        );
+                            $bulk = new MongoDB\Driver\BulkWrite;
+                            $first = false;
 
-                        $bulk->update(
-                            ['_id' => $_SESSION['user']],
-                            ['$set' => ['email' => $email]],
-                            ['multi' => false, 'upsert' => false]
-                        );
+                            if (($gestor = fopen($file, "r")) !== FALSE) {
 
-                        $bulk->update(
-                            ['_id' => $_SESSION['user']],
-                            ['$set' => ['pass' => $pass]],
-                            ['multi' => false, 'upsert' => false]
-                        );
+                                 while (($datos = fgetcsv($gestor, 1000, ",")) !== FALSE) {
 
-                        $result = $db->executeBulkWrite('usuarios.user', $bulk);
+                                     if($first) {
+
+                                         $numero = count($datos);
+
+                                         $date = ['user' => $_SESSION['user'], 'date' => date('Y-m-d', strtotime($datos[0])), 'heartbeat' => $datos[2]];
+
+                                         $bulk->insert($date);
+
+
+
+                                     }else{
+
+                                         $first =true;
+                                     }
+
+                                 }
+
+                            }
+
+                            $db->executeBulkWrite('usuarios.archive', $bulk);
+
+                        }
 
                     }
                         ?>

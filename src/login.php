@@ -80,7 +80,17 @@ if (isset($_POST['log'])){
                 $_SESSION['user'] = $cur->_id;
                 $_SESSION['name'] = $cur->name;
 
-                header("LOCATION: ./home.php");
+                if ($cur->test){
+
+                    header("LOCATION: ./home.php");
+
+                }else{
+
+                    header("LOCATION: ./cuestionario.php");
+
+                }
+
+
 
             }else{
 
