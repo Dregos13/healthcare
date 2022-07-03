@@ -122,10 +122,12 @@ $db = $conect->connect();
 
 if(isset($_POST['log'])){
 
-    $user = ['name' => $_POST['user'], 'pass' => $_POST['pass'], 'Age' => $_POST['age'], 'email' => $_POST['mail'], 'alta' => false];
+    $user = ['name' => $_POST['user'], 'pass' => $_POST['pass'], 'Age' => $_POST['age'], 'email' => $_POST['mail'], 'alta' => false, 'test' => false];
 
     $newUser = new user();
 
     $newUser->sign_in($user);
+
+    echo '<script type="text/javascript">alert("Usuario creado, pronto ser&aacute dado de alta.");</script>';
 
 }

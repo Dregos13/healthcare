@@ -42,10 +42,9 @@ if (isset($_SESSION['user'])){
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?php echo $_SESSION['name'] ?><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Activity Log</a></li>
+                    <li><a class="dropdown-item" href="">Ajustes</a></li>
                     <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                    <li><a class="dropdown-item" href="logout.php">Cerrar Sesión</a></li>
                 </ul>
             </li>
         </ul>
@@ -55,24 +54,15 @@ if (isset($_SESSION['user'])){
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <div class="sb-sidenav-menu-heading">Inicio</div>
                         <a class="nav-link" href="home.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Dashboard
+                            Inicio
                         </a>
-                        <div class="sb-sidenav-menu-heading">Data</div>
+                        <div class="sb-sidenav-menu-heading">Datos</div>
                         <a class="nav-link" href="subir.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                            Upload
-                        </a>
-                        <div class="sb-sidenav-menu-heading">Addons</div>
-                        <a class="nav-link" href="charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Charts
-                        </a>
-                        <a class="nav-link" href="tables.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                            Tables
+                            Subir datos
                         </a>
                     </div>
                 </div>
@@ -85,9 +75,9 @@ if (isset($_SESSION['user'])){
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4" style="align-content: center">
-                    <h1 class="mt-4">Settings</h1>
+                    <h1 class="mt-4">Ajustes</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Edit your data.</li>
+                        <li class="breadcrumb-item active">Edite sus datos personales.</li>
                     </ol>
                     <?php
                     $filter      = ['name' => $_SESSION['name']];
@@ -117,7 +107,7 @@ if (isset($_SESSION['user'])){
                                     <input type="text" class="form-control item" value="<?php echo $cur->Age ?>" name="age">
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-block create-account" name="modify">Apply Changes</button>
+                                    <button type="submit" class="btn btn-block create-account" name="modify">Aplicar Cambios</button>
                                 </div>
                             </form>
                     </div>

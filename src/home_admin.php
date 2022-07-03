@@ -6,10 +6,7 @@ require_once("../classes/Database.php");
 $conect = new Database();
 $db = $conect->connect();
 
-if (isset($_SESSION['user'])){
-
-
-
+if (isset($_SESSION['admin'])){
 
 ?>
 
@@ -25,12 +22,14 @@ if (isset($_SESSION['user'])){
     <link href="../style/style_homecss.css" rel="stylesheet" />
     <link href="../style/styles.css" rel="stylesheet" />
     <link rel="icon" href="../assets/heart.png">
+    <link href="../style/style_aux.css" rel="stylesheet" />
     <script src="../js/all.js" crossorigin="anonymous"></script>
+
 </head>
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="home.php">Healt Predict</a>
+    <a class="navbar-brand ps-3" href="home.php">Healt Predict - Admin</a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
     <!-- Navbar Search-->
@@ -41,10 +40,7 @@ if (isset($_SESSION['user'])){
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?php echo $_SESSION['name'] ?><i class="fas fa-user fa-fw"></i></a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="settings.php">Ajustes</a></li>
-                <li><a class="dropdown-item" href="home_predicciones.php">Predicciones</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="logout.php">Cerrar sesi&oacuten</a></li>
+                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
             </ul>
         </li>
     </ul>
@@ -55,7 +51,7 @@ if (isset($_SESSION['user'])){
             <div class="sb-sidenav-menu">
                 <div class="nav">
                     <div class="sb-sidenav-menu-heading">Core</div>
-                    <a class="nav-link" href="home.php">
+                    <a class="nav-link" href="home_admin.php">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                         Dashboard
                     </a>
@@ -70,76 +66,69 @@ if (isset($_SESSION['user'])){
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Dashboard</h1>
+                <h1 class="mt-4">Usuarios existentes</h1>
                 <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">View your data.</li>
+                    <li class="breadcrumb-item active">Administra los usuarios.</li>
                 </ol>
-                <div class="row">
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-primary text-white mb-4">
-                            <div class="card-body">Primary Card</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="#">View Details</a>
-                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-warning text-white mb-4">
-                            <div class="card-body">Warning Card</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="#">View Details</a>
-                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-success text-white mb-4">
-                            <div class="card-body">Success Card</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="#">View Details</a>
-                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-danger text-white mb-4">
-                            <div class="card-body">Danger Card</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="#">View Details</a>
-                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        Registros de la frecuencia card&iacuteaca
+                        Selecciona un usuario
                     </div>
                     <div class="card-body">
                         <table id="datatablesSimple">
                             <thead>
                             <tr>
-                                <th>Fecha</th>
-                                <th>Frecuencia Card&iacuteaca</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>Alta</th>
+                                <th>Opci&oacuten</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php
-                            $filter  = ['user' => $_SESSION['user']];
+
+                            $filter  = ['rol' => "user"];
                             $options = [];
 
                             $query = new \MongoDB\Driver\Query($filter, $options);
-                            $cursor = $db->executeQuery("usuarios.archive", $query);
+                            $cursor = $db->executeQuery("usuarios.user", $query);
 
                             foreach ($cursor as $cur) {
                                 echo "<tr>";
-                                echo "<th> $cur->date </th>";
-                                echo "<th> $cur->heartbeat </th>";
-                                echo "</tr>";
-                            }
+                                echo "<th> $cur->name </th>";
+                                echo "<th> $cur->Age </th>";
+                                echo "<th> $cur->email </th>";
+                                echo "<th> $cur->pass </th>";
+                                echo "<th><form method='post' action='admin_tansition.php'>";
+                                if($cur->alta){
+                                    ?>
 
+                                    <button class="button" value="<?php echo $cur->name; ?>" name="activa">
+                                        Activo
+                                    </button>
+
+                                    <?php
+                                }else{
+                                    ?>
+
+                                    <button class="button2" value="<?php echo $cur->name; ?>" name="inactiva">
+                                        Inactivo
+                                    </button>
+
+                                    <?php
+                                }
+                                echo "</form></th>";
+                                ?>
+                                <th>
+                                <button class="button2" value="<?php echo $cur->name; ?>" name="borrar">
+                                Borrar
+                                </button>
+                                </th>
+                                <?php
+                            }
                             ?>
                             </tbody>
                         </table>

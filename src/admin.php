@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once("../classes/Database.php");
 require_once("../classes/user.php");
 
@@ -23,90 +25,23 @@ $db = $conect->connect();
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 text-center mb-5">
-                <h2 class="heading-section">Sign Up</h2>
+                <h2 class="heading-section">Admin  Log In</h2>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <div class="login-wrap p-0">
-                    <h3 class="mb-4 text-center">Create a user</h3>
+                    <h3 class="mb-4 text-center">Inicia sesion</h3>
                     <form method="post" action="" class="signin-form">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Username" id="user" name="user" required>
-                            <span id="availablity" style="color: #aaaa00"></span>
                         </div>
-                        <script type="text/javascript">
-
-                            $('document').ready(function(){
-                                $('#user').blur(function(){
-                                    var username = $(this).val();
-                                    $.ajax ({
-                                        url : "functions.php",
-                                        method : "POST",
-                                        data :  {username : username },
-                                        dataType : "text",
-                                        success:function(html)
-                                        {
-                                            $('#availablity').html(html);
-                                        }
-                                    });
-                                });
-                            });
-                        </script>
                         <div class="form-group">
                             <input type="password" class="form-control" placeholder="Password" id="pass" name="pass" required>
+                            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Repeat password" id="pass2" name="pass2" required>
-                            <span id="equal" style="color: #aaaa00"></span>
-                            <script type="text/javascript">
-
-                                $('document').ready(function(){
-                                    $('#pass2').blur(function(){
-                                        var pass2 = $(this).val();
-                                        var pass = $('#pass').val();
-                                        $.ajax ({
-                                            url : "functions.php",
-                                            method : "POST",
-                                            data :  {pass2 : pass2,
-                                                     pass : pass},
-                                            dataType : "text",
-                                            success:function(html)
-                                            {
-                                                $('#equal').html(html);
-                                            }
-                                        });
-                                    });
-                                });
-                            </script>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Age" id="age" name="age" required>
-                            <span id="adult" style="color: #aaaa00"></span>
-                            <script type="text/javascript">
-
-                                $('document').ready(function(){
-                                    $('#age').blur(function(){
-                                        var age = $(this).val();
-                                        $.ajax ({
-                                            url : "functions.php",
-                                            method : "POST",
-                                            data :  {age: age},
-                                            dataType : "text",
-                                            success:function(html)
-                                            {
-                                                $('#adult').html(html);
-                                            }
-                                        });
-                                    });
-                                });
-                            </script>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control" placeholder="Email" id="Email" name="mail" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" class="form-control btn btn-primary submit px-3" name="log" value="Create user">
+                            <input type="submit" class="form-control btn btn-primary submit px-3" name="log" value="Log in">
                         </div>
                     </form>
                 </div>
@@ -120,12 +55,46 @@ $db = $conect->connect();
 
 <?php
 
-if(isset($_POST['log'])){
+if (isset($_POST['log'])){
 
-    $user = ['name' => $_POST['user'], 'pass' => $_POST['pass'], 'Age' => $_POST['age'], 'email' => $_POST['mail'], 'alta' => false];
+    $user_name = $_POST['user'];
+    $password = $_POST['pass'];
 
-    $newUser = new user();
+    $filter      = ['name' => $user_name];
+    $options = [];
 
-    $newUser->sign_in($user);
+    $query = new \MongoDB\Driver\Query($filter, $options);
+
+    $cursor = $db->executeQuery("usuarios.user", $query);
+
+
+    foreach ($cursor as $cur) {
+
+        if ($cur->pass == $password && $cur->name == $user_name) {
+
+            $alta = $cur->alta;
+
+            if($cur->rol == "admin") {
+
+                $_SESSION['admin'] = $cur->_id;
+                $_SESSION['name'] = $cur->name;
+
+                header("LOCATION: ./home_admin.php");
+
+
+            }else{
+
+                echo '<script type="text/javascript">alert("No eres Administrador.");</script>';
+
+            }
+
+        }else{
+
+            echo "Something went wrong";
+        }
+
+    }
 
 }
+
+?>
